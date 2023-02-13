@@ -1,0 +1,24 @@
+# Gradle build files
+.gradle/
+build/
+
+# Gradle wrapper
+gradle/wrapper/gradle-wrapper.jar
+
+# IntelliJ IDEA files
+.idea/
+*.iml
+
+# Eclipse files
+.classpath
+.project
+.settings/
+
+# Miscellaneous files
+*.log
+*.swp
+
+# Build output files
+*.jar
+*.war
+*.ear
