@@ -1,0 +1,59 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+}
+
+group 'ru.clevertec'
+version '1.5.3'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    implementation 'org.apache.commons:commons-lang3:3.10'
+}
+
+jar {
+    def jars = configurations.runtimeClasspath.files.collect { "lib/$it.name" }
+
+    manifest {
+        attributes 'Main-Class': 'ru.clevertec.utils.StringUtils',
+                'Class-Path': jars.join(' ')
+    }
+
+    duplicatesStrategy = (DuplicatesStrategy.EXCLUDE)
+}
+
+task copyAllDependencies(type: Copy) {
+    from configurations.runtimeClasspath.files
+    into("$buildDir/libs/lib")
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+        }
+    }
+    repositories {
+        mavenLocal()
+    }
+}
+
+
+test {
+    useJUnitPlatform()
+}
+
+build {
+    dependsOn publishToMavenLocal
+    dependsOn copyAllDependencies
+}
